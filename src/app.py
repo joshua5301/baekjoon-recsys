@@ -13,7 +13,7 @@ project_dir = os.path.dirname(os.path.dirname(__file__))
 data_dir = os.path.join(project_dir, 'data', 'preprocessed', 'problem_info.csv')
 problem_df = pd.read_csv(data_dir, index_col=0)
 
-st.header("백준 문제 추천해드립니다!")
+st.header("백준 문제 추천해드립니다! :sunglasses:")
 
 handle = st.text_input(label='', placeholder='solved.ac 핸들을 입력해주세요.')
 if st.button("추천받기") and handle:
@@ -23,14 +23,12 @@ if st.button("추천받기") and handle:
     for id, col in zip(recommendations, row1 + row2):
         title = problem_df.loc[id]['titleKo']
         level = problem_df.loc[id]['level']
-        with col:
-            image_dir = os.path.join(project_dir, 'assets', f'{level}.png')
-            st.image(image_dir, width=100)
-            hide_img_fs = '''
-            <style>
-            button[title="View fullscreen"]{
-                visibility: hidden;}
-            </style>
-            '''
-            st.markdown(hide_img_fs, unsafe_allow_html=True)
-            st.link_button(f"{id} - {title}",f"https://www.acmicpc.net/problem/{id}")
+        tile = col.container(border=True)
+        with tile:
+            left, mid, right = st.columns(3)
+            with mid:
+                image_dir = os.path.join(project_dir, 'assets', f'{level}.png')
+                st.image(image_dir, width=70)
+                disable_fullscreen = r'<style>button[title="View fullscreen"]{visibility: hidden;}</style>'
+                st.markdown(disable_fullscreen, unsafe_allow_html=True)
+            st.link_button(f"{id} - {title}",f"https://www.acmicpc.net/problem/{id}", use_container_width=True)
