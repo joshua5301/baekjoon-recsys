@@ -4,7 +4,7 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 import implicit
 
-def get_recommendations(handle: str, num: int) -> list[int]:
+def get_recommendations(target_handle: str, num: int) -> list[int]:
     """Get recommendations by using simple collaborative filitering.
 
     Parameters
@@ -36,10 +36,10 @@ def get_recommendations(handle: str, num: int) -> list[int]:
     model = implicit.als.AlternatingLeastSquares(factors=64, regularization=0.05, alpha=2.0)
     model.fit(user_item_matrix)
 
-    my_id = handle_to_id['37aster']
-    items, _ = model.recommend(my_id, user_item_matrix[my_id], N=num)
-    return list(items)
+    target_id = handle_to_id['37aster']
+    recommendations, _ = model.recommend(target_id, user_item_matrix[target_id], N=num)
+    return list(recommendations)
 
 if __name__ == '__main__':
-    problems = get_recommendations(handle='37aster', num=10)
+    problems = get_recommendations(target_handle='37aster', num=10)
     print(problems)
