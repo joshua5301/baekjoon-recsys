@@ -36,7 +36,7 @@ def get_recommendations(target_handle: str, num: int) -> list[int]:
     model = implicit.als.AlternatingLeastSquares(factors=64, regularization=0.05, alpha=2.0)
     model.fit(user_item_matrix)
 
-    target_id = handle_to_id['37aster']
+    target_id = handle_to_id[target_handle]
     recommendations, _ = model.recommend(target_id, user_item_matrix[target_id], N=num)
     return list(recommendations)
 
