@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd 
-from time import sleep
-from model import *
+from collaborative_model import *
 
 
 #페이지 기본 설정
@@ -14,9 +13,9 @@ st.set_page_config(
 return_list = list()
 st.header("협업 기반 필터링 추천 제공")
 if st.button("추천받기"):
-    buttons = get_recommendations()
+    buttons = get_recommendations('37aster', 10)
     for button in buttons: 
-            st.link_button(f"https://www.acmicpc.net/problem/{button}")
+            st.link_button(f"Go to {button}",f"https://www.acmicpc.net/problem/{button}")
 
 
 else:
