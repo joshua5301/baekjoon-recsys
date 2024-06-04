@@ -10,6 +10,7 @@ scipy = "*"
 pandas = "*"
 implicit = "*"
 numpy = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
