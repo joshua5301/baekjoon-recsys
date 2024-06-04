@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd 
-import collaborative_model
+import als_model
 import os
 
 # 페이지 기본 설정
