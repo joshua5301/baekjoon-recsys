@@ -5,7 +5,7 @@ from scipy.sparse import csr_matrix
 import implicit
 
 def get_recommendations(target_handle: str, num: int) -> list[int]:
-    """Get recommendations by using simple collaborative filitering.
+    """Get recommendations by using ALS.
 
     Parameters
     ----------
