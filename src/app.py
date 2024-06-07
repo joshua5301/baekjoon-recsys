@@ -16,7 +16,7 @@ problem_df = pd.read_csv(data_dir, index_col=0)
 
 st.header('백준 문제 추천해드립니다! :sunglasses:')
 
-handle = st.text_input(label='', placeholder='solved.ac 핸들을 입력해주세요.')
+handle = st.text_input(label='solved.ac 핸들', placeholder='solved.ac 핸들을 입력해주세요.', label_visibility='hidden')
 left, mid, right = st.columns([1, 10, 1])
 with right.popover('설정 :gear:'):
     tiers = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ruby']
