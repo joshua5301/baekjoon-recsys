@@ -22,8 +22,9 @@ with right.popover('설정 :gear:'):
     tiers = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ruby']
     levels = [f'{tier} {num}' for tier in tiers for num in range(5, 0, -1)]
     min_level, max_level = st.select_slider('티어 제한', options=levels, value=('Bronze 5', 'Ruby 1'))
-als_model = ALSRecSys()
-als_model.fit()
+
+with open(os.path.join(project_dir, 'models', 'ALS_model.pkl'), 'br') as file:
+    als_model: ALSRecSys = pickle.load(file)
 if left.button('추천받기') and handle:
     matched_ids = []
     id_num = 10
