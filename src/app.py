@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd 
-import als_model
+from als_rec_sys import ALSRecSys
 import os
+import pickle
 
 # 페이지 기본 설정
 st.set_page_config(
@@ -21,11 +22,13 @@ with right.popover('설정 :gear:'):
     tiers = ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Ruby']
     levels = [f'{tier} {num}' for tier in tiers for num in range(5, 0, -1)]
     min_level, max_level = st.select_slider('티어 제한', options=levels, value=('Bronze 5', 'Ruby 1'))
+als_model = ALSRecSys()
+als_model.fit()
 if left.button('추천받기') and handle:
     matched_ids = []
     id_num = 10
     while len(matched_ids) < 10:
-        ids = collaborative_model.get_recommendations(handle, id_num)
+        ids = als_model.get_recommendations(handle, id_num)
         is_in_range = lambda id: levels.index(min_level) + 1 <= problem_df.loc[id]['level'] <= levels.index(max_level) + 1
         matched_ids = [id for id in ids if is_in_range(id)]
         id_num *= 2
