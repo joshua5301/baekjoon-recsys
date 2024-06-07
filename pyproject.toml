@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "baekjoon-recsys"
+version = "0.1.0"
+description = "Simple recommendation system for BOJ."
+authors = ["joshua5301 <junha5301@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+numpy = "^1.26.4"
+pandas = "^2.2.2"
+implicit = "^0.7.2"
+scipy = "^1.13.1"
+
+[tool.poetry.group.dev.dependencies]
+streamlit = "^1.35.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
