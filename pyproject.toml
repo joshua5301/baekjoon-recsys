@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "baekjoon-recsys"
+name = "bojrecsys"
 version = "0.1.0"
 description = "Simple recommendation system for BOJ."
 authors = ["joshua5301 <junha5301@gmail.com>"]
