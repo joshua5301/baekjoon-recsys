@@ -1,4 +1,5 @@
 from bojrecsys import Dumper
+from bojrecsys import TFIDFRecSys
 from bojrecsys import ALSRecSys
 
 als = ALSRecSys()
