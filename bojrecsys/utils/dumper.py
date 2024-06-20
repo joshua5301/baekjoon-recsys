@@ -18,7 +18,7 @@ class Dumper:
         preproc_df.to_csv(file_path)
 
     def dump_problem_info(self, problem_info: dict):
-        file_path = os.path.join(self.raw_path, 'problem_info', f'{problem_info['problemId']}.json')
+        file_path = os.path.join(self.raw_path, 'problem_info', f'{problem_info["problemId"]}.json')
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'w') as file:
             json.dump(problem_info, file)

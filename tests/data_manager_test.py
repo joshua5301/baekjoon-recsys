@@ -14,7 +14,7 @@ class DataManagerTest(TestCase):
             'model_path': test_path.MODEL_PATH,
         }
         loader, dumper, checker = bojrecsys.Loader(**kwargs), bojrecsys.Dumper(**kwargs), bojrecsys.Checker(**kwargs)
-        downloader = bojrecsys.DataDownloader(call_sleep_sec=0.5)
+        downloader = bojrecsys.DataDownloader(call_sleep_sec=0.1)
         manager = bojrecsys.DataManager(downloader=downloader, loader=loader, dumper=dumper, checker=checker)
         manager.download_problem_info(problem_ids=list(range(1000, 10000)))
         manager.download_user_info()

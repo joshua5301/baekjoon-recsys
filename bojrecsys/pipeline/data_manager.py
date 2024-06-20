@@ -1,4 +1,3 @@
-import itertools
 from tqdm import tqdm
 from .data_downloader import DataDownloader
 from .data_preprocessor import DataPreprocessor
@@ -32,7 +31,16 @@ class DataManager:
         print(f'Total {len(missing_ids)} missing problems found.')
 
         download_cnt = 0
-        tqdm_iter = tqdm(list(itertools.batched(missing_ids, n=100)))
+        batched_missing_ids = []
+        batch = []
+        for id in missing_ids:
+            batch.append(id)
+            if len(batch) == 100:
+                batched_missing_ids.append(batch)
+                batch = []
+        if batch:
+            batched_missing_ids.append(batch)
+        tqdm_iter = tqdm(batched_missing_ids)
         for ids in tqdm_iter:
             tqdm_iter.set_description_str(f'Currently downloading - {ids[0]} to {ids[-1]}')
             problems = self.downloader.get_problems(ids)
@@ -67,7 +75,7 @@ class DataManager:
         universities = self.downloader.get_universities()
         tqdm_iter = tqdm(universities)
         for university in tqdm_iter:
-            tqdm_iter.set_description_str(f'Currently downloading - {university['name']} users')
+            tqdm_iter.set_description_str(f'Currently downloading - {university["name"]} users')
             if self.checker.is_raw_univ_user_info_missing(university['name']):
                 students = self.downloader.get_students(university['organizationId'])
                 self.dumper.dump_univ_user_info(students, university['name'])
