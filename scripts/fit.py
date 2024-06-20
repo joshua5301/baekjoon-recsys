@@ -1,11 +1,9 @@
-from bojrecsys import Dumper
-from bojrecsys import TFIDFRecSys
-from bojrecsys import ALSRecSys
+from bojrecsys import *
 
-als = ALSRecSys()
-als.fit()
-recommendations = als.get_recommendations('37aster', 10)
-print(*recommendations, sep=' ')
+recsys_list: list[RecSys] = [LatentFactorRecSys(), ItemRecSys(), ContentRecSys()]
+recsys_names = ['latent_factor_model', 'item_model', 'content_model']
 dumper = Dumper()
-dumper.dump_model(als, 'ALS_model')
+for recsys, name in zip(recsys_list, recsys_names):
+    recsys.fit()
+    dumper.dump_model(recsys, name)
 
