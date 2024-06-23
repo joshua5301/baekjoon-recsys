@@ -7,9 +7,19 @@ st.set_page_config(
     layout = 'wide'
 ) 
 
+st.markdown("""
+        <style>
+               .block-container {
+                    padding-top: 3rem;
+                    padding-bottom: 0rem;
+                    padding-left: 5rem;
+                    padding-right: 5rem;
+                }
+        </style>
+        """, unsafe_allow_html=True)
+
 loader = bojrecsys.Loader()
 problem_df = loader.load_preproc_df('problem_info')
-problem_df.set_index('problemId', drop=True)
 problem_df = problem_df.set_index('problemId')
 
 _, right1, right2 = st.columns([10, 3, 3])
@@ -21,6 +31,17 @@ with recommend_tab:
 with similar_tab:
     st.header('유사한 문제 보여드립니다! :star-struck:')
     problem_id = st.text_input(label='백준 문제 번호', placeholder='백준 문제 번호를 입력해주세요.', label_visibility='hidden')
+    if problem_id:
+        try:
+            problem_id = int(problem_id)
+            if problem_id < 1000:
+                raise ValueError
+        except ValueError:
+            st.subheader('\n')
+            with st.columns([1, 5, 1])[1].container(border=True):
+                st.subheader('잘못된 입력입니다. 문제 \'번호\'를 입력해주세요!')
+                problem_id = None
+
 with right1.popover('난이도 제한 :chart_with_upwards_trend:', use_container_width=True):
     tiers = ['B', 'S', 'G', 'P', 'D', 'R']
     levels = [f'{tier}{num}' for tier in tiers for num in range(5, 0, -1)]
@@ -33,19 +54,22 @@ with right2.popover('추천 방식 :gear:', use_container_width=True):
 
 @st.cache_data
 def get_matched_ids(model_name: str, input: str | int) -> list[int]:
+    global levels, min_level, max_level
     model: bojrecsys.RecSys = loader.load_model(model_name)
     if type(input) == str:
         get_ids = model.get_recommendations
     else:
         get_ids = model.get_similar_problems
+    ids = get_ids(input, 1000)
     matched_ids = []
-    id_num = 10
-    while len(matched_ids) < 10:
-        ids = get_ids(input, id_num)
-        is_in_range = lambda id: levels.index(min_level) + 1 <= problem_df.loc[id]['level'] <= levels.index(max_level) + 1
-        matched_ids = [id for id in ids if is_in_range(id)]
-        id_num *= 2
-    return matched_ids
+    for id in ids:
+        try:
+            level = problem_df.loc[id]['level']
+        except KeyError:
+            continue
+        if levels.index(min_level) + 1 <= level <= levels.index(max_level) + 1:
+            matched_ids.append(id)
+    return matched_ids[:10]
 
 def show_ids(ids: list[int]):
     row1 = st.columns(5)
@@ -58,17 +82,31 @@ def show_ids(ids: list[int]):
             _, mid, _ = st.columns(3)
             with mid:
                 image_dir = os.path.join(os.path.dirname(__file__), 'assets', f'{level}.png')
-                st.image(image_dir, width=70)
+                st.image(image_dir, width=50)
                 disable_fullscreen = r'<style>button[title="View fullscreen"]{visibility: hidden;}</style>'
                 st.markdown(disable_fullscreen, unsafe_allow_html=True)
             st.link_button(f"{id} - {title}",f"https://www.acmicpc.net/problem/{id}", use_container_width=True)
 
+with recommend_tab:
+    if handle:
+        try:
+            recommend_ids = get_matched_ids(selected_model_name, handle)
+            show_ids(recommend_ids)
+        except KeyError:
+            st.subheader('\n')
+            with st.columns([1, 5, 1])[1].container(border=True):
+                st.subheader('존재하지 않는 핸들입니다. :pensive:')
+                st.subheader('solved.ac에 가입된 아이디인가요?')
+with similar_tab:
+    if problem_id:
+        try:
+            similar_ids = get_matched_ids(selected_model_name, int(problem_id))
+            show_ids(similar_ids)
+        except KeyError:
+            st.subheader('\n')
+            with st.columns([1, 5, 1])[1].container(border=True):
+                st.subheader('존재하지 않는 문제 번호입니다. :sob:')
+                st.subheader('최신 문제들(32000번대 이후)는 아직 추가되지 않았습니다.')
+                if selected_model_name == 'content_model':
+                    st.subheader('컨텐츠 기반 추천의 경우 한국어 문제들만 지원됩니다.')
 
-if handle:
-    recommend_ids = get_matched_ids(selected_model_name, handle)
-    with recommend_tab:
-        show_ids(recommend_ids)
-if problem_id:
-    similar_ids = get_matched_ids(selected_model_name, int(problem_id))
-    with similar_tab:
-        show_ids(similar_ids)
