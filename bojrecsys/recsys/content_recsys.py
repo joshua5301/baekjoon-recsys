@@ -3,7 +3,6 @@ import re
 
 import numpy as np
 import pandas as pd
-
 import soynlp
 from gensim.models.word2vec import Word2Vec
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -90,6 +89,8 @@ class ContentRecSys(RecSys):
         loader = utils.Loader()
         solved_df = loader.load_preproc_df('solved_info')
         solved_problems = list(solved_df[solved_df['handle'] == target_handle]['problemId'])
+        if not solved_problems:
+            raise KeyError
         document_vector_mean = np.zeros(len(self.document_vectors[0]))
         document_cnt = 0
         for problem_id in solved_problems:
