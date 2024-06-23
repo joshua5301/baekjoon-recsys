@@ -25,7 +25,7 @@ class DataPreprocessor:
         content_df['problemId'] = pd.to_numeric(content_df['problemId'], errors='coerce')
 
         # Merge contents into problem dataframe
-        problem_df = problem_df.merge(content_df, how='inner', on='problemId')
+        problem_df = problem_df.merge(content_df, how='left', on='problemId')
 
         # Make tag feature into one clean string
         def get_clean_tags(tags: list[dict]) -> str:
@@ -49,7 +49,10 @@ class DataPreprocessor:
 
         # Clean up space chararcters in content feature
         def get_clean_content(content: str):
-            return ' '.join(content.split()[1:])
+            if pd.isna(content) or len(content.split()) == 1:
+                return ''
+            else:
+                return ' '.join(content.split()[1:])
         problem_df['content'] = problem_df['content'].apply(get_clean_content)
         
         # Drop unnecessary features    
