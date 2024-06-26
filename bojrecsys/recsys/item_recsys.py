@@ -13,7 +13,7 @@ class ItemRecSys(RecSys):
 
     def __init__(self):
         threadpool_limits(1, "blas")
-        self.model = implicit.nearest_neighbours.BM25Recommender()
+        self.model = implicit.nearest_neighbours.TFIDFRecommender()
         self.handle_to_index = {}
         self.problem_id_to_index = {}
         self.index_to_problem_id = {}
