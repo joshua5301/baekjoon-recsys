@@ -82,7 +82,7 @@ def show_ids(ids: list[int]):
             _, mid, _ = st.columns(3)
             with mid:
                 image_dir = os.path.join(os.path.dirname(__file__), 'assets', f'{level}.png')
-                st.image(image_dir, width=50)
+                st.image(image_dir, use_column_width=True)
                 disable_fullscreen = r'<style>button[title="View fullscreen"]{visibility: hidden;}</style>'
                 st.markdown(disable_fullscreen, unsafe_allow_html=True)
             st.link_button(f"{id} - {title}",f"https://www.acmicpc.net/problem/{id}", use_container_width=True)
