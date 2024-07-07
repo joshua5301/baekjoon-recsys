@@ -3,7 +3,7 @@ import bojrecsys
 import os
 
 st.set_page_config(
-    page_title = '백준 문제 추천',
+    page_title = 'Baekjoon Recsys',
     page_icon = os.path.join(os.path.dirname(__file__), 'assets', 'favicon.png'),
     layout = 'wide'
 ) 
