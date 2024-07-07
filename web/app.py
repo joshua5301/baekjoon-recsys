@@ -28,10 +28,10 @@ recommend_tab, similar_tab = st.tabs(['유저 별 추천 문제', '유사한 문
 
 with recommend_tab:
     st.header('백준 문제 추천해드립니다! :sunglasses:')
-    handle = st.text_input(label='solved.ac 핸들', placeholder='solved.ac 핸들을 입력해주세요.', label_visibility='hidden')
+    handle = st.text_input(label='solved.ac 핸들', placeholder='solved.ac 핸들을 입력해주세요. ex) 37aster', label_visibility='hidden')
 with similar_tab:
     st.header('유사한 문제 보여드립니다! :star-struck:')
-    problem_id = st.text_input(label='백준 문제 번호', placeholder='백준 문제 번호를 입력해주세요.', label_visibility='hidden')
+    problem_id = st.text_input(label='백준 문제 번호', placeholder='백준 문제 번호를 입력해주세요. ex) 1644', label_visibility='hidden')
     if problem_id:
         try:
             problem_id = int(problem_id)
