@@ -4,6 +4,7 @@ import os
 
 st.set_page_config(
     page_title = '백준 문제 추천',
+    page_icon = os.path.join(os.path.dirname(__file__), 'assets', 'favicon.png'),
     layout = 'wide'
 ) 
 
@@ -81,7 +82,7 @@ def show_ids(ids: list[int]):
         with tile:
             _, mid, _ = st.columns(3)
             with mid:
-                image_dir = os.path.join(os.path.dirname(__file__), 'assets', f'{level}.png')
+                image_dir = os.path.join(os.path.dirname(__file__), 'assets', 'level', f'{level}.png')
                 st.image(image_dir, use_column_width=True)
                 disable_fullscreen = r'<style>button[title="View fullscreen"]{visibility: hidden;}</style>'
                 st.markdown(disable_fullscreen, unsafe_allow_html=True)
