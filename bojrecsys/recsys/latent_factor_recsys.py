@@ -53,9 +53,9 @@ class LatentFactorRecSys(RecSys):
         problem_num = len(self.problem_id_to_index)
         solve_info = csr_matrix([1 if index in solved_indices else 0 for index in range(problem_num)])
 
-        recommendations, _ = self.model.recommend('dummy_index', solve_info, recalculate_user=True)
+        recommendations, _ = self.model.recommend('dummy_index', solve_info, N=problem_num, recalculate_user=True)
         recommendations = [self.index_to_problem_id[index] for index in recommendations]
-        return recommendations[:problem_num]
+        return recommendations
 
     def get_similar_problems(self, problem_id: int, problem_num: int):
         problem_index = self.problem_id_to_index[problem_id]

@@ -61,7 +61,7 @@ def get_matched_ids(model_name: str, input: str | int, min_level: int, max_level
         get_ids = model.get_recommendations
     else:
         get_ids = model.get_similar_problems
-    ids = get_ids(input, 1000)
+    ids = get_ids(input, 10000)
     matched_ids = []
     for id in ids:
         try:
