@@ -53,8 +53,8 @@ with right2.popover('추천 방식 :gear:', use_container_width=True):
     selected_model_name = model_names[how.index(selected_how)]
 
 @st.cache_data
-def get_matched_ids(model_name: str, input: str | int) -> list[int]:
-    global levels, min_level, max_level
+def get_matched_ids(model_name: str, input: str | int, min_level: int, max_level: int) -> list[int]:
+    global levels
     model: bojrecsys.RecSys = loader.load_model(model_name)
     if type(input) == str:
         get_ids = model.get_recommendations
@@ -90,7 +90,7 @@ def show_ids(ids: list[int]):
 with recommend_tab:
     if handle:
         try:
-            recommend_ids = get_matched_ids(selected_model_name, handle)
+            recommend_ids = get_matched_ids(selected_model_name, handle, min_level, max_level)
             show_ids(recommend_ids)
         except KeyError:
             st.subheader('\n')
@@ -100,7 +100,7 @@ with recommend_tab:
 with similar_tab:
     if problem_id:
         try:
-            similar_ids = get_matched_ids(selected_model_name, int(problem_id))
+            similar_ids = get_matched_ids(selected_model_name, int(problem_id), min_level, max_level)
             show_ids(similar_ids)
         except KeyError:
             st.subheader('\n')
