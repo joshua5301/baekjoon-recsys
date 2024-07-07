@@ -23,7 +23,7 @@ loader = bojrecsys.Loader()
 problem_df = loader.load_preproc_df('problem_info')
 problem_df = problem_df.set_index('problemId')
 
-_, right1, right2 = st.columns([10, 3, 3])
+_, right1, right2 = st.columns([10, 4, 4])
 recommend_tab, similar_tab = st.tabs(['유저 별 추천 문제', '유사한 문제'])
 
 with recommend_tab:
@@ -48,7 +48,7 @@ with right1.popover('난이도 제한 :chart_with_upwards_trend:', use_container
     levels = [f'{tier}{num}' for tier in tiers for num in range(5, 0, -1)]
     min_level, max_level = st.select_slider('티어 제한', options=levels, value=('B5', 'R1'))
 with right2.popover('추천 방식 :gear:', use_container_width=True):
-    how = ['잠재 요인 기반', '다른 유저가 푼 기록 기반', '문제 본문 기반']
+    how = ['잠재 요인 기반', '문제를 해결한 유저 기반', '문제 본문 기반']
     model_names = ['latent_factor_model', 'item_model', 'content_model']
     selected_how = st.selectbox(label='추천 방식', options=how, label_visibility='collapsed')
     selected_model_name = model_names[how.index(selected_how)]
