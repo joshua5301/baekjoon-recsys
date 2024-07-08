@@ -98,6 +98,11 @@ with recommend_tab:
             with st.columns([1, 5, 1])[1].container(border=True):
                 st.subheader('존재하지 않는 핸들입니다. :pensive:')
                 st.subheader('solved.ac에 가입된 아이디인가요?')
+        except ConnectionError:
+            with st.columns([1, 5, 1])[1].container(border=True):
+                st.subheader('solved.ac 서버가 바쁜가봐요. :pensive:')
+                st.subheader('잠시 후 시도해주세요.')
+
 with similar_tab:
     if problem_id:
         try:
