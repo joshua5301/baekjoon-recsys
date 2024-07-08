@@ -5,7 +5,7 @@ import os
 
 st.set_page_config(
     page_title = 'Baekjoon Recsys',
-    page_icon = os.path.join(os.path.dirname(__file__), 'assets', 'favicon.png'),
+    page_icon = ':sparkles:',
     layout = 'wide'
 ) 
 
