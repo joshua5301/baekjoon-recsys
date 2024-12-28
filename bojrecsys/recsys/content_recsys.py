@@ -103,7 +103,7 @@ class ContentRecSys(RecSys):
         document_vector_mean /= document_cnt
         return self._get_similar_document_vectors(document_vector_mean, num)
 
-    def get_similar_problems(self, problem_id: int, num: int):
+    def get_similar_problems(self, problem_id: int, num: int) -> list[int]:
         vector_index = self.id_to_vector_index[problem_id]
         target_vector = self.document_vectors[vector_index]
         return self._get_similar_document_vectors(target_vector, num)

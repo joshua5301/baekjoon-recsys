@@ -11,6 +11,7 @@ gensim = "^4.3.2"
 implicit = "^0.7.2"
 soynlp = "^0.0.493"
 scipy = "<1.13"
+torch = "^2.5.1"
 
 [tool.poetry.group.dev.dependencies]
 streamlit = "^1.36.0"

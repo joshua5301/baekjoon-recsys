@@ -1,7 +1,7 @@
 from bojrecsys import *
 
 loader = Loader()
-model = ItemRecSys()
+model = CollaborativeRecSys()
 model.fit()
-recommendations = model.get_recommendations('37asterdsedf', 10)
+recommendations = model.get_recommendations('37aster', 10)
 print(*recommendations)

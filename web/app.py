@@ -24,7 +24,7 @@ loader = bojrecsys.Loader()
 problem_df = loader.load_preproc_df('problem_info')
 problem_df = problem_df.set_index('problemId')
 
-_, right1, right2 = st.columns([10, 4, 4])
+_, right = st.columns([10, 3])
 recommend_tab, similar_tab = st.tabs(['유저 별 추천 문제', '유사한 문제'])
 
 with recommend_tab:
@@ -44,30 +44,26 @@ with similar_tab:
                 st.subheader('잘못된 입력입니다. 문제 \'번호\'를 입력해주세요!')
                 problem_id = None
 
-with right1.popover('난이도 제한 :chart_with_upwards_trend:', use_container_width=True):
+with right.popover('난이도 제한 :chart_with_upwards_trend:', use_container_width=True):
     tiers = ['B', 'S', 'G', 'P', 'D', 'R']
     levels = [f'{tier}{num}' for tier in tiers for num in range(5, 0, -1)]
     min_level, max_level = st.select_slider('티어 제한', options=levels, value=('B5', 'R1'))
-with right2.popover('추천 방식 :gear:', use_container_width=True):
-    how = ['잠재 요인 기반', '문제를 해결한 유저 기반', '문제 본문 기반']
-    model_names = ['latent_factor_model', 'item_model', 'content_model']
-    selected_how = st.selectbox(label='추천 방식', options=how, label_visibility='collapsed')
-    selected_model_name = model_names[how.index(selected_how)]
 
 @st.cache_data
-def get_ids(model_name: str, input: str | int):
-    model: bojrecsys.RecSys = loader.load_model(model_name)
+def get_ids(input: str | int):
     if type(input) == str:
+        model: bojrecsys.CollaborativeRecSys = loader.load_model('collaborative_recsys')
         ids = model.get_recommendations(input, 20000)
     else:
+        model: bojrecsys.ContentRecSys = loader.load_model('content_recsys')
         ids = model.get_similar_problems(input, 20000)
     return ids
 
 @st.cache_data
-def get_matched_ids(model_name: str, input: str | int, min_level: int, max_level: int) -> list[int]:
+def get_matched_ids(input: str | int, min_level: int, max_level: int) -> list[int]:
     global levels
     matched_ids = []
-    ids = get_ids(model_name, input)
+    ids = get_ids(input)
     for id in ids:
         try:
             level = problem_df.loc[id]['level']
@@ -96,7 +92,7 @@ def show_ids(ids: list[int]):
 with recommend_tab:
     if handle:
         try:
-            recommend_ids = get_matched_ids(selected_model_name, handle, min_level, max_level)
+            recommend_ids = get_matched_ids(handle, min_level, max_level)
             show_ids(recommend_ids)
         except KeyError:
             st.subheader('\n')
@@ -111,13 +107,12 @@ with recommend_tab:
 with similar_tab:
     if problem_id:
         try:
-            similar_ids = get_matched_ids(selected_model_name, int(problem_id), min_level, max_level)
+            similar_ids = get_matched_ids(int(problem_id), min_level, max_level)
             show_ids(similar_ids)
         except KeyError:
             st.subheader('\n')
             with st.columns([1, 5, 1])[1].container(border=True):
                 st.subheader('존재하지 않는 문제 번호입니다. :sob:')
                 st.subheader('최신 문제들(32000번대 이후)는 아직 추가되지 않았습니다.')
-                if selected_model_name == 'content_model':
-                    st.subheader('컨텐츠 기반 추천의 경우 한국어 문제들만 지원됩니다.')
+                st.subheader('또한 컨텐츠 기반 추천의 경우 한국어 문제들만 지원됩니다.')
 

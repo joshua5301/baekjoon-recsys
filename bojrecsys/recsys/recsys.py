@@ -7,9 +7,9 @@ class RecSys(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def get_recommendations(self, handle: str, problem_num: int):
+    def get_recommendations(self, handle: str, problem_num: int) -> list[int]:
         pass
 
     @abstractmethod
-    def get_similar_problems(self, problem_id: int, problem_num: int):
+    def get_similar_problems(self, problem_id: int, problem_num: int) -> list[int]:
         pass
