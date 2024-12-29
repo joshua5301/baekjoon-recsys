@@ -125,7 +125,11 @@ class CollaborativeRecSys(RecSys):
             else:
                 raise e
         
-        solved_indices = [self.problem_id_to_index[problem['problemId']] for problem in problems]
+        solved_indices = []
+        for problem in problems:
+            problem_id = problem['problemId']
+            if problem_id in self.problem_id_to_index:
+                solved_indices.append(self.problem_id_to_index[problem_id])
         problem_num = len(self.problem_id_to_index)
         solve_info = [1 if index in solved_indices else 0 for index in range(problem_num)]
         solve_info = torch.tensor(solve_info, dtype=torch.float32).unsqueeze(0)
